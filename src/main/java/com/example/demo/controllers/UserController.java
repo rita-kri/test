@@ -1,12 +1,13 @@
 package com.example.demo.controllers;
 
+
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +16,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.exceptions.ResourceNotFoundException;
+import com.example.demo.payloads.ApiResponse;
 import com.example.demo.payloads.UserDto;
 import com.example.demo.services.UserService;
 
@@ -40,11 +42,13 @@ public class UserController {
 		return ResponseEntity.ok(updatedUser);
 	}
 	
-	@DeleteMapping("/{userId}")
-	public ResponseEntity<UserDto> deleteUser(@PathVariable("userId") Integer id){
-		this.userService.deleteUser(id);
-		return new ResponseEntity(Map.of("message", "User Deleted successfully"), HttpStatus.OK);
-		
+	@DeleteMapping(value = "/{userId}", produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+	public ResponseEntity<ApiResponse> deleteUser(@PathVariable Integer userId){
+	 this.userService.deleteUser(userId);
+	    //Map<String, String> response = new HashMap<>();
+	   // response.put("Message", "User deleted successfully");
+	   // return new ResponseEntity<>(response, HttpStatus.OK);
+	    return new ResponseEntity<ApiResponse>(new ApiResponse("User deleted usccessfully", true), HttpStatus.OK);
 	}
 	
 	@GetMapping("/")

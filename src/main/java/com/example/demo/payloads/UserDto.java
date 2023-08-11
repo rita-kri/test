@@ -1,28 +1,38 @@
 package com.example.demo.payloads;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @NoArgsConstructor
 public class UserDto {
 	
 	private int id;
 	
-	@NotNull
+	@NotBlank
+	@Size(min = 4, message = "Username must be min of 4 charcater !!")
 	private String name;
 	
-	@Email
+	@Email(message = "Email address is not valid")
 	private String email;
 	
-	@NotNull
+	@NotBlank
+	@Size(min =3, max=10, message = "Password must be of 3 chars and max of 10 chars")
 	private String password;
 	
-	@NotNull
+	@NotBlank
 	private String about;
+	
+	
+
+	public UserDto() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	public int getId() {
 		return id;

@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,24 +38,30 @@ public class UserServiceImpl implements UserService {
 		user.setEmail(userDto.getEmail());
 		user.setPassword(userDto.getPassword());
 		user.setAbout(userDto.getAbout());
-		return null;
+		User upatedUser = this.userRepo.save(user);
+		return this.userToDto(upatedUser);
 	}
 
 	@Override
 	public UserDto getUserById(Integer userId) {
-		// TODO Auto-generated method stub
-		return null;
+		User user  = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "Id", userId));
+		return this.userToDto(user);
 	}
 
 	@Override
 	public List<UserDto> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users = this.userRepo.findAll();
+		List<UserDto> collectList = users.stream().map(user -> this.userToDto(user)).collect(Collectors.toList());
+		return collectList;
 	}
 
 	@Override
 	public void deleteUser(Integer userId) {
-		// TODO Auto-generated method stub
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(()-> new ResourceNotFoundException("user", "id", userId));
+		this.userRepo.delete(user);
+		
 		
 	}
 	
